@@ -1,0 +1,8 @@
+1290,Pywcd,Python3.6,4,2
+7890,Mllp,Machine Learning,4,3
+3456,Pywcd,python 2.7,5,3
+1234,Indu ma,Soft Computing,7,2
+4321,Data structure,Data structure,4,1
+345,qwert,sdfgh,4,1
+34567,chandan,Css,3,0
+3412,Pywcd,Python3.6,2,2

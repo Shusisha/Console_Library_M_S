@@ -1,0 +1,375 @@
+#Library Mangement System
+import time
+from datetime import date,timedelta,datetime
+def home():
+    a=1
+    while a:
+        print(" Library Mangement System ".center(120,'='))
+        a=int(input('''Select a choice
+1.Admin Login
+2.Admin SignUp
+3.Student Login
+4.Student SignUp
+0.Enter the '0' to Exit\n'''))
+        if a is 1:
+            adminlog()
+        elif a is 3:
+            stdlog()
+        elif a is 2:
+            adminsign()
+        elif a is 4:
+            stdsign()
+        elif a is 0:
+            a=0
+            print("---Thank You for accessing the Page---".center(120))
+        else:
+            print("---Enter the valid choice---".center(120))
+        print("")
+            
+def adminsign():
+    print(" Admin SignUp ".center(120,'*'))
+    b="%s,%s\n"%(input("Enter the New Admin Username\n"),input("Enter the New Admin Password\n"))
+    data = open("d:/PProject/Admin.txt").read().split("\n")
+    c=0
+    for j in range(len(data)-1):
+        s= data[j].split(",")
+        if b.split(",")[0] == s[0]:
+            print("---User Already Exits---".center(120))
+            c=1
+    if c==0:
+        open("d:/PProject/Admin.txt","a").write(b)
+        print("---You are Successfully Signed In---".center(120))
+        print("")
+        adminlog()
+        
+    
+def adminlog():
+    print(" Admin Login ".center(120,'*'))
+    b="%s,%s\n"%(input("Enter the Admin Username\n"),input("Enter the Admin Password\n"))
+    if b in open("d:/PProject/Admin.txt").read():
+        print("---You are Successfully Logged In---".center(120))
+        print("")
+        admin()
+    else:
+        print("---Enter The Valid Admin Username and Password---".center(120))
+    
+def stdsign():
+    print(" Student SignUp ".center(120,'*'))
+    b="%s,%s,%s\n"%(input("Enter the Student Name\n"),input("Enter the 10 digit Student Rollnumber\n"),input("Create New Password\n"))
+    if b.split(",")[1].isdigit() and len(b.split(",")[1])==10 :
+        c=0
+        data = open("d:/PProject/Student.txt").read().split("\n")
+        for j in range(len(data)-1):
+            s= data[j].split(",")
+            if b.split(",")[0] == s[0]:
+                print("---User Already Exits---".center(120))
+                c=1
+        if c==0:
+            open("d:/PProject/Student.txt","a").write(b)
+            stdlog()
+    else:
+        print("---Enter The Valid RollNumber : Rollnumber must be of 10 digits---".center(120))
+    
+def stdlog():
+    print(" Student Login ".center(120,'*'))
+    b="%s,%s,%s"%(input("Enter the Student Name\n"),input("Enter the Student Rollnumber\n"),input("Enter the Student Password\n"))
+    if b in open("D:/PProject/Student.txt").read():
+        print("---You are Successfully Logged In---".center(120))
+        stdpage(b)
+    else:
+        print("---Enter The Valid Student Username and Password---".center(120))
+    
+def admin():
+    a=1
+    while a:
+        print(" Admin Page ".center(120,'*'))
+        a=int(input('''Select a Choice
+1.Add Books in Library
+2.List Of Books 
+3.Update Book
+4.Availability of Books
+5.Students Detail
+0.Logout\n'''))
+        if a is 1:
+            addbook()
+        elif a is 4:
+            booksearch()
+        elif a is 2:
+            listbook()
+        elif a is 3:
+            bookupdate()
+        elif a is 5:
+            userdetail()
+        elif a is 0:
+            a=0
+            print("---Successfully Logged Out---".center(120))
+        else:
+            print("---Enter the valid choice---".center(120))
+        print("")
+        
+def addbook():
+    print(" Add Book ".center(120,"*"))
+    b="%s,%s,%s,%s,0\n"%(input("ISBN No.  :  "),input("Auth. Name:  "),input("Book Name :  "),input("Quantity  :  "))
+    if b[0].isdigit():
+          if b.split(",")[0] in open("d:/PProject/Books.txt").read():
+                print("---Cannot Add: 'Books with ISBN No.",(b.split(",")[0]),"is already exit'---")
+          else:
+                open("d:/PProject/Books.txt","a").write(b)
+          c=int(input('''
+1.Add More
+2.Back to Admin Page\n'''))
+          if c is 1:
+              addbook()
+          elif c is 2:
+              admin()
+          else:
+              print("---Enter the valid choice---".center(120))
+    else:
+          print("---Enter Valid ISBN No.---".center(120))
+          addbook()
+    print("")
+    
+def booksearch():
+    print(" Book Availability".center(120,"*"))
+    print("\n")
+    b="%s"%(input("Search by Book Name/Auth.Name/ISBN No. :   "))
+    if b.lower() in open("d:/PProject/Books.txt").read().lower():
+        print("".center(70,"~").center(120))
+        print("||{:<8}||{:<16}||{:<16}||{:<4}||{:<4}||".format("ISBN No",'Author Name','Book Name','Quantity','Available').center(120))
+        print("".center(70,"~").center(120))
+        data=open("d:/PProject/Books.txt").read().split("\n")
+        for i in range(len(data)-1):
+            if b in data[i]:
+                d=data[i].split(",")
+                print("{:<7}  {:<16}  {:<17}  {:<8}  {:<4}".format(d[0],d[1],d[2],d[3],str(int(d[3])-int(d[4]))).center(120))
+        print("".center(70,"~").center(120))
+    else:
+        print("---Book not Found---".center(120))
+    c=int(input('''
+1.Search More Book
+2.Back to previous Page\n'''))
+    if c is 1:
+        booksearch()
+    elif c is 2:
+        print("")
+    else:
+        print("---Enter the valid choice---".center(120))
+    print("")
+
+def bookupdate():
+    print("Book Update".center(120,"*"))
+    b="%s"%(input("ISBN NO :   "))
+    if b in open("d:/PProject/Books.txt").read():
+        e=int(input('''\n
+1.Edit Quantity of book
+2.Delete Book Detail from Library System 
+3.Press any other key to go back to Admin Page\n'''))
+        data=open("d:/PProject/Books.txt").read().split("\n")
+        if e is 1:
+            for j in range(len(data)-1):
+                  if b in data[j]:
+                      print("Old Quantity  ",(data[j].split(",")[-2]))
+                      n=input("Enter new Quantity  ")
+                      if data[j].split(",")[-2]<=n:
+                          a=open("d:/PProject/Books.txt")
+                          i=a.read().find(b)
+                          a.seek(i+j)
+                          l=data[j].split(",")
+                          q=b+","+l[1]+","+l[2]+","+n+","+l[4]+"\n"
+                          s=open("d:/PProject/Books.txt").read().replace(a.readline(),q)
+                          open("d:/PProject/Books.txt","w").write(s)
+                      else:
+                          print("---Cannot Edit: No. of issued books are greater than new quantity---".center(120))
+        elif e is 2:
+            for j in range(len(data)-1):
+                  if b in data[j]:
+                      if data[j].rpartition(",")[-1]=='0':
+                          a=open("d:/PProject/Books.txt")
+                          i=a.read().find(b)
+                          a.seek(i+j)
+                          s=open("d:/PProject/Books.txt").read().replace(a.readline(),"")
+                          open("d:/PProject/Books.txt","w").write(s)
+                      else:
+                          print("---Cannot Delete: Books are still issued---".center(120))
+        else:
+            print("\n")
+            
+    else:
+        print("---No Book record found for ISBN No : ",b,"---")
+
+def listbook():
+    print(" List of Book ".center(120,"*"),end="\n")
+    print("".center(60,"~").center(120))
+    print("||{:<8}||{:<16}||{:<16}||{:<4}||".format('ISBN No','Author Name','Book Name','Quantity').center(120))
+    print("".center(60,"~").center(120))
+    data=open("d:/PProject/Books.txt").read().split("\n")
+    for i in range(len(data)-1):
+        d=data[i].split(",")
+        print("{:<7}  {:<16}  {:<16}  {:<4}".format(d[0],d[1][:14],d[2][:14],d[3]).center(120))
+    print("".center(60,"~").center(120))
+    print("")
+
+def userdetail():
+    print(" Students Detail ".center(120,"*"))
+    print("".center(63,"~").center(120))
+    print("||{:<11}||{:<13}||{:<30}||".format('RollNumber','Student Name','No of Book Isssued + ISBN No.').center(120))
+    print("".center(63,"~").center(120))
+    data=open("d:/PProject/Student.txt").readlines()
+    a=open("d:/PProject/Issuedbook.txt").readlines()
+    for j in data:
+        c=0
+        d=""
+        k=j.split(",")
+        for i in a:
+            if k[1] in i:
+                c+=1
+                b=i.split(",")[0]
+                d=d+" "+b
+        print("  {:<10}   {:<13}   {:<30}".format(k[1],k[0],str(c)+" "+d).center(120))
+    print("".center(63,"~").center(120))
+    print("")
+
+def stdpage(b):
+    a=1
+    while a:
+        print(" Student Page ".center(120,'*'))
+        a=int(input('''Select a Choice
+1.List Of Books
+2.Books Available
+3.Issue A Book
+4.View Issued Book Detail
+5.Fine Calculate and Return Book
+0.Logout\n\n'''))
+        if a is 2:
+            booksearch()
+        elif a is 1:
+            listbook()
+        elif a is 3:
+            issuebook(b)
+        elif a is 4:
+            viewissue(b)
+        elif a is 5:
+            returnb(b)
+        elif a is 0:
+            a=0
+            print("---Successfully Logged Out---".center(120))
+        else:
+            print("---Enter the valid choice---".center(120))
+        print("")
+
+def issuebook(b):
+    print("Issue Book(s)".center(120,"*"))
+    c=input("\nEnter the ISBN No. :  ")
+    if c in open("d:/PProject/Books.txt").read():
+        if c+","+b.split(",")[1] in open("D:/PProject/Issuedbook.txt").read():
+            print("---Already issued---".center(120))
+        else:
+              print("".center(70,"~").center(120))
+              print("||{:<8}||{:<16}||{:<16}||{:<4}||{:<4}||".format('ISBN No','Author Name','Book Name','Quantity','Available').center(120))
+              print("".center(70,"~").center(120))
+              data=open("d:/PProject/Books.txt").read().split("\n")
+              aval=0
+              for i in range(len(data)-1):
+                  if c in data[i]:
+                      d=data[i].split(",")
+                      aval=(int(d[3])-int(d[4]))
+                      print("{:<10}{:<18}{:<18}{:<10}{:>6}".format(d[0],d[1][:16],d[2][:16],d[3],str(aval)).center(120))
+              print("".center(70,"~").center(120))          
+              if aval==0:
+                  print("")
+                  print("---Book is not available---".center(120))
+              else:
+                  t=date.today()
+                  print("\nIssue date : ",t)
+                  et=t+timedelta(1)
+                  print("Issue date : ",et)
+                  iss=c+","+b.split(",")[1]+","+str(t)+","+str(et)+"\n"
+                  open("D:/PProject/Issuedbook.txt","a").write(iss)
+                  print("---Book is successfully Issued---".center(120))
+                  j=0
+                  data=open("d:/PProject/Books.txt").read().split("\n")
+                  for j in range(len(data)-1):
+                   if c in data[j]:
+                          a=open("d:/PProject/Books.txt")
+                          i=a.read().find(c)
+                          a.seek(i+j)
+                          l=data[j].split(",")
+                          q=l[0]+","+l[1]+","+l[2]+","+l[3]+","+str(int(l[4])+1)+"\n"
+                          s=open("d:/PProject/Books.txt").read().replace(a.readline(),q)
+                          open("d:/PProject/Books.txt","w").write(s)
+    else:
+        print("---No Book in library with this ISBN No---".center(120))
+    q=int(input('''
+1.Issue more books
+2.Back to previous Page\n'''))
+    if q is 1:
+                  issuebook(b)
+    elif q is 2:
+                  print("")
+    else:
+                  print("---Enter the valid choice---".center(120))
+                  print("")
+                  
+def  viewissue(b):
+      print("View Issued Book Detail".center(120,"*"))
+      print("\nBook(s) issued by "+ b.split(",")[0])
+      print("".center(42,"~").center(120))
+      print("||{:<10}||{:<13}||{:<10}||".format('ISBN No','Issued Date','Expiry Date').center(120))
+      print("".center(42,"~").center(120))
+      data=open("d:/PProject/Issuedbook.txt").read().split("\n")
+      k=0
+      for i in range(len(data)-1):
+            if b.split(",")[1] in data[i]:
+                d=data[i].split(",")
+                print(" {:<12} {:<15} {:<12}".format(d[0],d[2],d[3]).center(120))
+                k=1
+      print("".center(42,"~").center(120))
+      if k==0:
+            print("---No Book is issued till now---".center(120))
+      print("")
+
+def returnb(b):
+    print("Fine Calculate and Return Book".center(120,"*"))
+    if b.split(",")[1] in open("d:/PProject/Issuedbook.txt").read():
+        d=input("Enter the ISBN No : ")
+        if d in open("d:/PProject/Issuedbook.txt").read():
+           data=open("d:/PProject/Issuedbook.txt").read().split("\n")
+           for j in range(len(data)-1):
+                  if d in data[j]:
+                      fine(data[j])
+                      if input("Do you Want to return book Y/N : ").lower()=='y':
+                          a=open("d:/PProject/Issuedbook.txt")
+                          i=a.read().find(d)
+                          a.seek(i+j)
+                          s=open("d:/PProject/Issuedbook.txt").read().replace(a.readline(),"")
+                          open("d:/PProject/Issuedbook.txt","w").write(s)
+                          j=0
+                          data=open("d:/PProject/Books.txt").read().split("\n")
+                          for j in range(len(data)-1):
+                           if d in data[j]:
+                              a=open("d:/PProject/Books.txt")
+                              i=a.read().find(d)
+                              a.seek(i+j)
+                              l=data[j].split(",")
+                              q=l[0]+","+l[1]+","+l[2]+","+l[3]+","+str(int(l[4])-1)+"\n"
+                              s=open("d:/PProject/Books.txt").read().replace(a.readline(),q)
+                              open("d:/PProject/Books.txt","w").write(s)
+                          print("---Book is Successfully return---".center(120))    
+                      break
+        else:
+            print("---This book is not issued---".center(120))
+    else:
+        print("---No Book is issued till now---".center(120))
+
+def fine(data):
+    f="%Y-%m-%d"
+    fine=int(str(datetime.strptime(str(date.today()),f)-datetime.strptime(data.split(",")[-1],f)).split(" ")[0])*20
+    if fine>0:
+        print("Fine per day : ",u"\u20B9","20")
+        print("Total Fine : ",u"\u20B9",fine)
+    else:
+        print("No Fine : Book is under Due Date")                       
+
+
+if __name__=="__main__":
+    home()
